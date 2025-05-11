@@ -16,3 +16,8 @@
    1. reason also unclear
 4. calling MCP tool
    1. changes in the API, hinger long-term usage
+5. code execution doesn't work with structured output
+   1. use examples to help format output
+6. few-shot learning makes Gemini not execute code
+   1. break down into two parts, writing code and reflection, remove few-shot learning from execution phase
+7. smithery constantly changes it's API, making integration inefficient and unsuitable for long-term usage

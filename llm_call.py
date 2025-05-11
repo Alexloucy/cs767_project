@@ -4,6 +4,11 @@ import dotenv
 from datetime import datetime
 from google import genai
 from google.genai import types
+from pydantic import BaseModel
+
+class Reflection(BaseModel):
+    reflection: str
+    need_improve: bool
 
 # Load environment variables
 dotenv.load_dotenv()
@@ -11,7 +16,7 @@ dotenv.load_dotenv()
 # Initialize Gemini client
 client = genai.Client(api_key=os.getenv("google_ai_api_key"))
 
-async def call_llm(prompt: str, isCode: bool = False) -> str:
+async def call_llm(prompt: str, isCode: bool = False, isReflection = False) -> str:
     """
     Execute code using Gemini's code execution capabilities.
     
@@ -35,6 +40,26 @@ async def call_llm(prompt: str, isCode: bool = False) -> str:
                     temperature=0
                 )
             )
+            return response
+        elif (isReflection):
+            reflection_prompt = f"""
+            Analyze this solution and respond with a JSON object containing:
+            {{
+                "need_improve": true/false,
+                "feedback": "detailed explanation of what needs improvement or why the solution is correct"
+            }}
+
+            Solution to analyze:
+            {prompt}
+            """
+            response = client.models.generate_content(
+                model='gemini-2.0-flash',
+                contents=reflection_prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0
+                )
+            )
+            return response.text
         else:
             response = client.models.generate_content(
                 model='gemini-2.0-flash',
@@ -43,8 +68,7 @@ async def call_llm(prompt: str, isCode: bool = False) -> str:
                     temperature=0
                 )
             )
-        
-        return response.text
+            return response.text
         
     except Exception as e:
         print(f"Error occurred during code execution: {str(e)}")
