@@ -6,8 +6,16 @@ from google import genai
 from google.genai import types
 from pydantic import BaseModel
 
-class Reflection(BaseModel):
-    reflection: str
+class Search_Result(BaseModel):
+    answer: str
+    feedback: str
+    problem: str
+    need_improve: bool
+
+class Code_Reflect(BaseModel):
+    answer: int
+    feedback: str
+    problem: str
     need_improve: bool
 
 # Load environment variables
@@ -16,7 +24,7 @@ dotenv.load_dotenv()
 # Initialize Gemini client
 client = genai.Client(api_key=os.getenv("google_ai_api_key"))
 
-async def call_llm(prompt: str, isCode: bool = False, isReflection = False) -> str:
+async def call_llm(prompt: str, isCode: bool = False, isReflection = False, summerize: bool = False) -> str:
     """
     Execute code using Gemini's code execution capabilities.
     
@@ -42,30 +50,38 @@ async def call_llm(prompt: str, isCode: bool = False, isReflection = False) -> s
             )
             return response
         elif (isReflection):
-            reflection_prompt = f"""
-            Analyze this solution and respond with a JSON object containing:
-            {{
-                "need_improve": true/false,
-                "feedback": "detailed explanation of what needs improvement or why the solution is correct"
-            }}
-
-            Solution to analyze:
-            {prompt}
-            """
+            reflection_prompt = f"""{prompt}"""
             response = client.models.generate_content(
                 model='gemini-2.0-flash',
                 contents=reflection_prompt,
                 config=types.GenerateContentConfig(
-                    temperature=0
+                    temperature=0,
+                    response_schema=Code_Reflect,
+                    response_mime_type="application/json",
+                    max_output_tokens=500
                 )
             )
+            return response.text
+        elif (summerize):
+            reflection_prompt = "\n".join(prompt)
+            response = client.models.generate_content(
+                model='gemini-2.0-flash',
+                contents= "summarize the following reflection to one sentence less than 50 words. Don't focus on the specific case, generalize it so that it can be applied to other similar questions. \n" + reflection_prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0,
+                )
+            )
+            print("summerize response:", response.text)
             return response.text
         else:
             response = client.models.generate_content(
                 model='gemini-2.0-flash',
-                contents=prompt,
+                contents=prompt + " output the answer only",
                 config=types.GenerateContentConfig(
-                    temperature=0
+                    temperature=0,
+                    response_schema=Search_Result,
+                    response_mime_type="application/json",
+                    max_output_tokens=500
                 )
             )
             return response.text
