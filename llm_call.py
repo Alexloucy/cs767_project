@@ -71,7 +71,6 @@ async def call_llm(prompt: str, isCode: bool = False, isReflection = False, summ
                     temperature=0,
                 )
             )
-            print("summerize response:", response.text)
             return response.text
         else:
             response = client.models.generate_content(

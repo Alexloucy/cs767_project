@@ -4,7 +4,7 @@ import json
 import base64
 import os
 
-config = {}
+# config = {}
 config = {"braveApiKey": os.getenv("BRAVE_API_KEY")}
 # Encode config in base64
 config_b64 = base64.b64encode(json.dumps(config).encode())
