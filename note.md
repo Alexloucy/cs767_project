@@ -74,3 +74,9 @@ Strict Exact Match Score: 79.00%
 Semantic Match Score: 94.00% 15. Code Execution Metrics:
 Strict Exact Match Score: 50.00%
 Semantic Match Score: 92.00% 16. 16. code feedback summary 1. feedback summary: ['Calculations lacking context hinder understanding and error detection; clearly showing the origin of each number is crucial for accurate problem-solving and verification.\n', 'The code incorrectly used the calculated number of shelves instead of the given number of books in a formula, leading to an inaccurate result.\n', 'The problem requires calculating a total value based on given parameters, but the provided solution is incorrect due to a miscalculation or misunderstanding of the input values.\n', 'Carefully review all provided information and calculations to ensure accuracy, as overlooking details can lead to incorrect results.\n', 'Calculating a discounted total involves finding the discount amount, subtracting it from the original price to get the discounted price, and then multiplying by the quantity.\n', 'The solution involves identifying missing information, performing basic calculations based on given values, and then finding the difference to arrive at the correct answer.\n']
+
+Questions worse off without long term memory: 27, 61, 62, 138, 192
+85, 114, 144
+
+no mem code question: Strict Exact Match Score: 84.00%
+Semantic Match Score: 95.00%
