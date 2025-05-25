@@ -9,7 +9,7 @@ from pydantic import BaseModel
 class Search_Result(BaseModel):
     answer: str
     feedback: str
-    problem: str
+    new_query: str
     need_improve: bool
 
 class Code_Reflect(BaseModel):
@@ -24,7 +24,7 @@ dotenv.load_dotenv()
 # Initialize Gemini client
 client = genai.Client(api_key=os.getenv("google_ai_api_key"))
 
-async def call_llm(prompt: str, isCode: bool = False, isReflection = False, summerize: bool = False) -> str:
+async def call_llm(prompt: str, isCode: bool = False, isReflection = False, summerize: bool = False, search_init = False) -> str:
     """
     Execute code using Gemini's code execution capabilities.
     
@@ -67,6 +67,15 @@ async def call_llm(prompt: str, isCode: bool = False, isReflection = False, summ
             response = client.models.generate_content(
                 model='gemini-2.0-flash',
                 contents= "summarize the following reflection to one sentence less than 50 words. Don't focus on the specific case, generalize it so that it can be applied to other similar questions. \n" + reflection_prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0,
+                )
+            )
+            return response.text
+        elif (search_init):
+            response = client.models.generate_content(
+                model='gemini-2.0-flash',
+                contents=prompt + " output the answer only",
                 config=types.GenerateContentConfig(
                     temperature=0,
                 )
