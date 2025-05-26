@@ -80,3 +80,12 @@ Questions worse off without long term memory: 27, 61, 62, 138, 192
 
 no mem code question: Strict Exact Match Score: 84.00%
 Semantic Match Score: 95.00%
+
+no mem search: Strict Exact Match Score: 83.00%
+Semantic Match Score: 93.00%
+
+mem search: Strict Exact Match Score: 86.00%
+Semantic Match Score: 95.00%
+
+mem search v2: Strict Exact Match Score: 86.00%
+Semantic Match Score: 97.00%

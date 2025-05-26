@@ -1,4 +1,3 @@
-[
 {
 "question": "Which innovation for the car was developed by Prince Henry of Prussia in 1911?",
 "current_answer": "Spark plug",
@@ -27,4 +26,3 @@
 "new_query": "which state joined Union one year after North Carolina admission date",
 "need_improvement": false
 }
-]
